@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeHarbor — PTSD & Hoarding Disorder Support</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* =============================================
+     ROOT VARIABLES — color palette & fonts
+     ============================================= */
+  :root {
+    --lavender:   #7c6fcd;
+    --soft-blue:  #5b9bd5;
+    --sage:       #6aab8e;
+    --blush:      #d4869c;
+    --cream:      #fdfcfa;
+    --warm-white: #f8f5f0;
+    --card-bg:    rgba(255, 255, 255, 0.82);
+    --text-dark:  #2c3a47;
+    --text-mid:   #4a5568;
+    --text-light: #718096;
+    --shadow:     0 4px 24px rgba(100, 100, 160, 0.12);
+    --radius:     18px;
+    --transition: all 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  /* =============================================
+     RESET & BASE
+     ============================================= */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* =============================================
+     ANIMATED GRADIENT BACKGROUND
+     Slowly breathes through soft calming colors
+     ============================================= */
+  .bg-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      135deg,
+      #e8eaf6,
+      #e0f2f1,
+      #fce4ec,
+      #e3f2fd,
+      #f3e5f5
+    );
+    background-size: 400% 400%;
+    animation: breathe 18s ease infinite;
+  }
+
+  @keyframes breathe {
+    0%   { background-position: 0% 50%; }
+    25%  { background-position: 100% 0%; }
+    50%  { background-position: 100% 100%; }
+    75%  { background-position: 0% 100%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* =============================================
+     FLOATING WHATSAPP BUTTON
+     Always visible in bottom-right corner
+     ============================================= */
+  .wa-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 999;
+    background: #25d366;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 25px rgba(37, 211, 102, 0.45);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .wa-float:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 12px 35px rgba(37, 211, 102, 0.55);
+  }
+
+  .wa-float .wa-icon { font-size: 1.3rem; }
+
+  /* =============================================
+     SCROLL TO TOP BUTTON
+     ============================================= */
+  #scrollTop {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 28px;
+    z-index: 998;
+    background: var(--lavender);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(124, 111, 205, 0.4);
+    transition: var(--transition);
+  }
+
+  #scrollTop:hover { transform: translateY(-3px); }
+
+  /* =============================================
+     HERO SECTION
+     ============================================= */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px 60px;
+    position: relative;
+  }
+
+  .hero-badge {
+    background: rgba(124, 111, 205, 0.15);
+    color: var(--lavender);
+    border: 1px solid rgba(124, 111, 205, 0.3);
+    border-radius: 50px;
+    padding: 6px 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    display: inline-block;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    color: var(--text-dark);
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span { color: var(--lavender); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: var(--text-mid);
+    max-width: 560px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: #25d366;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+    transition: var(--transition);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(37, 211, 102, 0.5);
+  }
+
+  .btn-secondary {
+    background: var(--card-bg);
+    color: var(--lavender);
+    border: 2px solid var(--lavender);
+    border-radius: 50px;
+    padding: 14px 30px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: var(--transition);
+  }
+
+  .btn-secondary:hover {
+    background: var(--lavender);
+    color: white;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(124, 111, 205, 0.35);
+  }
+
+  /* Calm stat row in hero */
+  .hero-stats {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+
+  .stat-item {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    padding: 18px 28px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    color: var(--lavender);
+    font-weight: 700;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+
+  /* =============================================
+     NAVIGATION TABS
+     ============================================= */
+  .nav-wrap {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.6);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(100,100,160,0.1);
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 18px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-light);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .tab-btn:hover { color: var(--lavender); }
+
+  .tab-btn.active {
+    color: var(--lavender);
+    border-bottom-color: var(--lavender);
+    font-weight: 600;
+  }
+
+  /* =============================================
+     SECTION CONTAINERS
+     ============================================= */
+  .section {
+    display: none;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 50px 20px 80px;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .section.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    color: var(--text-dark);
+    margin-bottom: 10px;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 40px;
+    line-height: 1.6;
+    max-width: 600px;
+  }
+
+  .divider {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, var(--lavender), var(--soft-blue));
+    border-radius: 4px;
+    margin: 14px 0 36px;
+  }
+
+  /* =============================================
+     CARDS
+     ============================================= */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    padding: 26px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.7);
+    transition: var(--transition);
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(100, 100, 160, 0.18);
+  }
+
+  .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(124, 111, 205, 0.12);
+    color: var(--lavender);
+    border-radius: 50px;
+    padding: 3px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  .tag.green {
+    background: rgba(106, 171, 142, 0.15);
+    color: var(--sage);
+  }
+
+  .tag.blue {
+    background: rgba(91, 155, 213, 0.15);
+    color: var(--soft-blue);
+  }
+
+  /* =============================================
+     EXPANDABLE ARTICLES (accordion)
+     Click to open/close each article
+     ============================================= */
+  .article-item {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .article-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition);
+    gap: 16px;
+  }
+
+  .article-header:hover { background: rgba(124, 111, 205, 0.06); }
+
+  .article-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+  }
+
+  .article-num {
+    background: linear-gradient(135deg, var(--lavender), var(--soft-blue));
+    color: white;
+    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .article-title-wrap h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    line-height: 1.4;
+  }
+
+  .article-title-wrap .article-meta {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 3px;
+  }
+
+  .article-arrow {
+    font-size: 1.1rem;
+    color: var(--lavender);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    flex-shrink: 0;
+  }
+
+  .article-item.open .article-arrow { transform: rotate(180deg); }
+
+  .article-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+                padding 0.4s ease,
+                opacity 0.4s ease;
+    opacity: 0;
+    padding: 0 24px;
+  }
+
+  .article-item.open .article-body {
+    max-height: 600px;
+    padding: 0 24px 24px;
+    opacity: 1;
+  }
+
+  .article-body p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .article-body p:last-child { margin-bottom: 0; }
+
+  .article-body .citation {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-style: italic;
+    border-left: 3px solid var(--lavender);
+    padding-left: 12px;
+    margin-top: 14px;
+  }
+
+  /* =============================================
+     SYMPTOM CHECKER / SELF-ASSESSMENT
+     ============================================= */
+  .assessment-intro {
+    background: rgba(124, 111, 205, 0.08);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 28px;
+    border-left: 4px solid var(--lavender);
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .assessment-intro strong { color: var(--lavender); }
+
+  .assessment-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+
+  .assess-tab {
+    background: var(--card-bg);
+    border: 2px solid rgba(124, 111, 205, 0.25);
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .assess-tab:hover { border-color: var(--lavender); color: var(--lavender); }
+
+  .assess-tab.active {
+    background: var(--lavender);
+    color: white;
+    border-color: var(--lavender);
+    box-shadow: 0 4px 15px rgba(124, 111, 205, 0.35);
+  }
+
+  .assess-panel { display: none; }
+  .assess-panel.active { display: block; animation: fadeUp 0.4s ease; }
+
+  .question-block {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.7);
+  }
+
+  .question-text {
+    font-size: 0.92rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .question-num-badge {
+    background: linear-gradient(135deg, var(--lavender), var(--soft-blue));
+    color: white;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .options-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .opt-btn {
+    background: rgba(124, 111, 205, 0.06);
+    border: 2px solid rgba(124, 111, 205, 0.2);
+    border-radius: 50px;
+    padding: 7px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .opt-btn:hover { border-color: var(--lavender); color: var(--lavender); }
+
+  .opt-btn.selected {
+    background: var(--lavender);
+    color: white;
+    border-color: var(--lavender);
+    box-shadow: 0 3px 12px rgba(124, 111, 205, 0.35);
+  }
+
+  .submit-assess {
+    background: linear-gradient(135deg, var(--lavender), var(--soft-blue));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: var(--transition);
+    box-shadow: 0 6px 20px rgba(124, 111, 205, 0.35);
+  }
+
+  .submit-assess:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(124, 111, 205, 0.45);
+  }
+
+  /* Assessment result box */
+  .result-box {
+    display: none;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin-top: 24px;
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.5s ease;
+    text-align: center;
+  }
+
+  .result-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .result-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .result-desc {
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    max-width: 480px;
+    margin: 0 auto 24px;
+    line-height: 1.7;
+  }
+
+  .result-low  { color: var(--sage); }
+  .result-mid  { color: #e8a838; }
+  .result-high { color: var(--blush); }
+
+  /* =============================================
+     CONTACT / BOOKING SECTION
+     ============================================= */
+  .contact-hero {
+    background: linear-gradient(135deg, rgba(124,111,205,0.12), rgba(91,155,213,0.12));
+    border-radius: 24px;
+    padding: 50px 40px;
+    text-align: center;
+    margin-bottom: 36px;
+    border: 1px solid rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+  }
+
+  .contact-hero h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    color: var(--text-dark);
+    margin-bottom: 14px;
+  }
+
+  .contact-hero p {
+    font-size: 1rem;
+    color: var(--text-mid);
+    margin-bottom: 28px;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* =============================================
+     FOOTER
+     ============================================= */
+  footer {
+    background: rgba(44, 58, 71, 0.9);
+    backdrop-filter: blur(12px);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 36px 20px;
+    font-size: 0.85rem;
+  }
+
+  footer span { color: #b39ddb; }
+  footer .disclaimer {
+    max-width: 620px;
+    margin: 10px auto 0;
+    font-size: 0.78rem;
+    opacity: 0.65;
+    line-height: 1.6;
+  }
+
+  /* =============================================
+     RESPONSIVE
+     ============================================= */
+  @media (max-width: 600px) {
+    .hero-stats { gap: 12px; }
+    .stat-item { padding: 14px 18px; }
+    .contact-hero { padding: 34px 20px; }
+    .wa-float .wa-text { display: none; }
+    .wa-float { padding: 14px; border-radius: 50%; }
+    .wa-float .wa-icon { font-size: 1.5rem; margin: 0; }
+    #scrollTop { bottom: 90px; right: 16px; }
+    .wa-float { bottom: 20px; right: 16px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- =============================================
+     ANIMATED BACKGROUND LAYER
+     ============================================= -->
+<div class="bg-wrap"></div>
+
+<!-- =============================================
+     FLOATING WHATSAPP BUTTON
+     Always visible — takes user directly to WA
+     ============================================= -->
+<a class="wa-float"
+   href="https://wa.me/6281250900387?text=Hello%2C%20I%20need%20support%20regarding%20PTSD%20or%20Hoarding%20Disorder."
+   target="_blank">
+  <span class="wa-icon">💬</span>
+  <span class="wa-text">Talk to Us Now</span>
+</a>
+
+<!-- Scroll to top button -->
+<button id="scrollTop" onclick="scrollToTop()">↑</button>
+
+<!-- =============================================
+     HERO SECTION
+     ============================================= -->
+<div class="hero">
+  <div class="hero-badge">Compassionate Online Support</div>
+
+  <h1>You Are Not Alone.<br><span>We Are Here.</span></h1>
+
+  <p class="hero-sub">
+    Professional online support for individuals living with PTSD or Hoarding Disorder,
+    and for the loved ones who care for them.
+  </p>
+
+  <div class="hero-cta">
+    <a class="btn-primary"
+       href="https://wa.me/6281250900387?text=Hello%2C%20I%20need%20support%20regarding%20PTSD%20or%20Hoarding%20Disorder."
+       target="_blank">
+      <span>💬</span> Chat on WhatsApp
+    </a>
+    <button class="btn-secondary" onclick="showSection('assess', this)">
+      Take a Self-Check
+    </button>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">3.9%</div>
+      <div class="stat-label">Adults affected by PTSD</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2–6%</div>
+      <div class="stat-label">Adults with Hoarding Disorder</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Online & Private</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24 / 7</div>
+      <div class="stat-label">WhatsApp Support</div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     STICKY NAVIGATION TABS
+     ============================================= -->
+<div class="nav-wrap">
+  <div class="nav-tabs">
+    <button class="tab-btn" onclick="showSection('about', this)">🏠 About</button>
+    <button class="tab-btn" onclick="showSection('ptsd', this)">🧠 PTSD</button>
+    <button class="tab-btn" onclick="showSection('hoarding', this)">📦 Hoarding Disorder</button>
+    <button class="tab-btn" onclick="showSection('assess', this)">📋 Self-Assessment</button>
+    <button class="tab-btn" onclick="showSection('research', this)">📚 Research</button>
+    <button class="tab-btn" onclick="showSection('contact', this)">💬 Get Support</button>
+  </div>
+</div>
+
+<!-- =============================================
+     SECTION: ABOUT
+     ============================================= -->
+<div class="section" id="about">
+  <h2 class="section-title">About SafeHarbor</h2>
+  <div class="divider"></div>
+  <p class="section-sub">
+    We offer compassionate, evidence-informed online support for those experiencing
+    PTSD or Hoarding Disorder — and for the families and caregivers walking alongside them.
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🌿</span>
+      <h3>Trauma-Informed Approach</h3>
+      <p>Every session is guided by safety, trust, and compassion. We never push — we walk at your pace, creating space for genuine healing.</p>
+      <span class="tag">Our Method</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">📱</span>
+      <h3>Fully Online & Private</h3>
+      <p>All support is delivered privately through WhatsApp or video call. No commuting, no waiting rooms. Access care from your safe space.</p>
+      <span class="tag green">Accessible</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">👨‍👩‍👧</span>
+      <h3>For Caregivers Too</h3>
+      <p>Supporting someone with PTSD or Hoarding Disorder is exhausting. We offer guidance, coping strategies, and emotional support for families too.</p>
+      <span class="tag blue">Family Support</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">📋</span>
+      <h3>Structured Symptom Tracking</h3>
+      <p>We use validated self-assessment tools to help you understand what you or your loved one is experiencing — no guesswork, just clarity.</p>
+      <span class="tag">Evidence-Based</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔒</span>
+      <h3>Confidential & Safe</h3>
+      <p>Everything shared with us stays between us. Confidentiality is the foundation of the support we offer — always.</p>
+      <span class="tag green">Private</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">💬</span>
+      <h3>No Referral Needed</h3>
+      <p>Just message us on WhatsApp. We'll have a no-pressure introductory conversation to understand how we can best support you.</p>
+      <span class="tag blue">Easy Start</span>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SECTION: PTSD
+     ============================================= -->
+<div class="section" id="ptsd">
+  <h2 class="section-title">Understanding PTSD</h2>
+  <div class="divider"></div>
+  <p class="section-sub">
+    Post-Traumatic Stress Disorder develops after experiencing or witnessing a
+    traumatic event. It is not a sign of weakness — it is how the brain
+    tries to protect you from further harm.
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🔁</span>
+      <h3>Re-Experiencing</h3>
+      <p>Intrusive memories, flashbacks, or nightmares of the traumatic event. The trauma feels like it's happening again, even when you're physically safe.</p>
+      <span class="tag">Symptom Cluster 1</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🚪</span>
+      <h3>Avoidance</h3>
+      <p>Avoiding thoughts, feelings, places, people, or activities that are reminders of the trauma. This can quietly shrink your world over time.</p>
+      <span class="tag">Symptom Cluster 2</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🌫️</span>
+      <h3>Negative Thoughts & Mood</h3>
+      <p>Persistent negative beliefs about yourself or the world. Feeling detached, emotionally numb, or unable to experience positive emotions.</p>
+      <span class="tag">Symptom Cluster 3</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">⚡</span>
+      <h3>Heightened Reactivity</h3>
+      <p>Being easily startled, hypervigilant, irritable, having difficulty sleeping, or engaging in reckless behaviour. The nervous system stays on high alert.</p>
+      <span class="tag">Symptom Cluster 4</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🧑‍🤝‍🧑</span>
+      <h3>For Those Who Care</h3>
+      <p>Living with or caring for someone with PTSD can feel isolating and confusing. Secondary trauma is real. We support caregivers just as much as those experiencing PTSD directly.</p>
+      <span class="tag green">Caregiver Guide</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">✨</span>
+      <h3>PTSD is Treatable</h3>
+      <p>With the right support — including Trauma-Focused CBT, EMDR, and structured interventions — people recover meaningful quality of life. Recovery is genuinely possible.</p>
+      <span class="tag blue">Hope</span>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SECTION: HOARDING DISORDER
+     ============================================= -->
+<div class="section" id="hoarding">
+  <h2 class="section-title">Understanding Hoarding Disorder</h2>
+  <div class="divider"></div>
+  <p class="section-sub">
+    Hoarding Disorder is a recognised mental health condition — not a lifestyle
+    choice or laziness. It involves persistent difficulty discarding possessions,
+    regardless of their actual value.
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">📦</span>
+      <h3>Difficulty Discarding</h3>
+      <p>Strong urge to keep items regardless of their practical value. Discarding anything — even broken or unused objects — causes significant distress and anxiety.</p>
+      <span class="tag">Core Feature</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🏠</span>
+      <h3>Clutter That Impairs Living</h3>
+      <p>Living spaces become so cluttered they can no longer be used for their intended purpose. Kitchens, bedrooms, and bathrooms may become inaccessible.</p>
+      <span class="tag">Core Feature</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🛍️</span>
+      <h3>Excessive Acquisition</h3>
+      <p>Compulsive buying, collecting free items, or being unable to leave places without picking things up. Often accompanied by intense feelings of urgency.</p>
+      <span class="tag">Common Feature</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">😔</span>
+      <h3>Shame & Social Isolation</h3>
+      <p>Many people with Hoarding Disorder feel deep shame and stop inviting others to their home. Social isolation often worsens the condition over time.</p>
+      <span class="tag green">Impact</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🧠</span>
+      <h3>It's Not About the Objects</h3>
+      <p>Hoarding is about the meaning attached to objects — safety, memory, identity, or control. Understanding this is key to compassionate support and effective treatment.</p>
+      <span class="tag blue">Insight</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">💙</span>
+      <h3>How to Support Someone</h3>
+      <p>Never clean or discard without consent — this can deepen trauma and damage trust. Approach with curiosity, not judgment. Professional guidance makes a profound difference.</p>
+      <span class="tag green">Caregiver Guide</span>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SECTION: SELF-ASSESSMENT
+     Interactive symptom checkers for PTSD and Hoarding Disorder
+     Scores are educational only — not clinical diagnosis
+     ============================================= -->
+<div class="section" id="assess">
+  <h2 class="section-title">Self-Assessment Tools</h2>
+  <div class="divider"></div>
+
+  <div class="assessment-intro">
+    <strong>Important:</strong> These tools are for educational and self-awareness purposes only.
+    They are not diagnostic instruments. A score does not mean you have or don't have a condition.
+    If you are concerned about your results, please reach out to us — we are here to help.
+  </div>
+
+  <!-- Sub-tabs: PTSD or Hoarding -->
+  <div class="assessment-tabs">
+    <button class="assess-tab active" onclick="switchAssess('ptsd-check', this)">🧠 PTSD Check</button>
+    <button class="assess-tab" onclick="switchAssess('hoard-check', this)">📦 Hoarding Disorder Check</button>
+  </div>
+
+  <!-- ---- PTSD ASSESSMENT ---- -->
+  <div class="assess-panel active" id="ptsd-check">
+    <p style="font-size:0.88rem; color:var(--text-light); margin-bottom:22px; line-height:1.6;">
+      Based on the DSM-5 symptom criteria for PTSD. For each statement, choose how often
+      you have experienced this <strong>in the past month.</strong>
+    </p>
+
+    <!-- Questions 1–10 -->
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">1</span>Repeated, disturbing memories, thoughts, or images of a stressful past experience.</div>
+      <div class="options-row" data-q="p1">
+        <button class="opt-btn" onclick="selectOpt(this, 'p1', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p1', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p1', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p1', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p1', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">2</span>Repeated, disturbing dreams of a stressful past experience.</div>
+      <div class="options-row" data-q="p2">
+        <button class="opt-btn" onclick="selectOpt(this, 'p2', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p2', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p2', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p2', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p2', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">3</span>Suddenly feeling or acting as if the experience were happening again (flashback).</div>
+      <div class="options-row" data-q="p3">
+        <button class="opt-btn" onclick="selectOpt(this, 'p3', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p3', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p3', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p3', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p3', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">4</span>Feeling very upset when something reminded you of the stressful experience.</div>
+      <div class="options-row" data-q="p4">
+        <button class="opt-btn" onclick="selectOpt(this, 'p4', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p4', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p4', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p4', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p4', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">5</span>Avoiding thoughts or feelings related to the stressful experience.</div>
+      <div class="options-row" data-q="p5">
+        <button class="opt-btn" onclick="selectOpt(this, 'p5', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p5', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p5', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p5', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p5', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">6</span>Avoiding external reminders of the experience (people, places, activities, situations).</div>
+      <div class="options-row" data-q="p6">
+        <button class="opt-btn" onclick="selectOpt(this, 'p6', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p6', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p6', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p6', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p6', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">7</span>Trouble remembering important parts of the stressful experience.</div>
+      <div class="options-row" data-q="p7">
+        <button class="opt-btn" onclick="selectOpt(this, 'p7', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p7', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p7', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p7', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p7', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">8</span>Having strong negative beliefs about yourself, others, or the world.</div>
+      <div class="options-row" data-q="p8">
+        <button class="opt-btn" onclick="selectOpt(this, 'p8', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p8', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p8', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p8', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p8', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">9</span>Feeling emotionally numb or unable to have loving feelings for those close to you.</div>
+      <div class="options-row" data-q="p9">
+        <button class="opt-btn" onclick="selectOpt(this, 'p9', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p9', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p9', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p9', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p9', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">10</span>Being "super-alert", watchful, or on guard, even when there's no obvious threat.</div>
+      <div class="options-row" data-q="p10">
+        <button class="opt-btn" onclick="selectOpt(this, 'p10', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p10', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p10', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p10', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p10', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">11</span>Feeling jumpy or easily startled by sounds or movements around you.</div>
+      <div class="options-row" data-q="p11">
+        <button class="opt-btn" onclick="selectOpt(this, 'p11', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p11', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p11', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p11', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p11', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">12</span>Having difficulty sleeping or staying asleep.</div>
+      <div class="options-row" data-q="p12">
+        <button class="opt-btn" onclick="selectOpt(this, 'p12', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p12', 1)">A little</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p12', 2)">Moderately</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p12', 3)">Quite a bit</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'p12', 4)">Extremely</button>
+      </div>
+    </div>
+
+    <button class="submit-assess" onclick="calcPTSD()">See My Results →</button>
+
+    <!-- Result Box -->
+    <div class="result-box" id="ptsd-result">
+      <div class="result-score" id="ptsd-score-display">--</div>
+      <div class="result-label" id="ptsd-level">--</div>
+      <p class="result-desc" id="ptsd-desc">--</p>
+      <a class="btn-primary"
+         href="https://wa.me/6281250900387?text=I%20completed%20the%20PTSD%20self-assessment%20and%20would%20like%20to%20discuss%20my%20results."
+         target="_blank">
+        <span>💬</span> Discuss My Results on WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- ---- HOARDING ASSESSMENT ---- -->
+  <div class="assess-panel" id="hoard-check">
+    <p style="font-size:0.88rem; color:var(--text-light); margin-bottom:22px; line-height:1.6;">
+      Based on the Hoarding Rating Scale (HRS). Rate how much each statement applies
+      <strong>to you or the person you are supporting.</strong>
+    </p>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">1</span>To what extent is your home cluttered with so many possessions that it is difficult to use rooms for their intended purpose?</div>
+      <div class="options-row" data-q="h1">
+        <button class="opt-btn" onclick="selectOpt(this, 'h1', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h1', 2)">Mild</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h1', 4)">Moderate</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h1', 6)">Severe</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h1', 8)">Extreme</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">2</span>To what extent do you have difficulty discarding (or recycling, selling, giving away) ordinary things that other people would get rid of?</div>
+      <div class="options-row" data-q="h2">
+        <button class="opt-btn" onclick="selectOpt(this, 'h2', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h2', 2)">Mild</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h2', 4)">Moderate</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h2', 6)">Severe</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h2', 8)">Extreme</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">3</span>To what extent do you currently have a problem with collecting free things or buying more things than you need or can use?</div>
+      <div class="options-row" data-q="h3">
+        <button class="opt-btn" onclick="selectOpt(this, 'h3', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h3', 2)">Mild</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h3', 4)">Moderate</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h3', 6)">Severe</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h3', 8)">Extreme</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">4</span>To what extent does clutter or difficulty discarding cause you emotional distress (anxiety, shame, guilt, sadness)?</div>
+      <div class="options-row" data-q="h4">
+        <button class="opt-btn" onclick="selectOpt(this, 'h4', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h4', 2)">Mild</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h4', 4)">Moderate</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h4', 6)">Severe</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h4', 8)">Extreme</button>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text"><span class="question-num-badge">5</span>To what extent do you avoid inviting people into your home because of the clutter or mess?</div>
+      <div class="options-row" data-q="h5">
+        <button class="opt-btn" onclick="selectOpt(this, 'h5', 0)">Not at all</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h5', 2)">Mild</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h5', 4)">Moderate</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h5', 6)">Severe</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'h5', 8)">Extreme</button>
+      </div>
+    </div>
+
+    <button class="submit-assess" onclick="calcHoarding()">See My Results →</button>
+
+    <div class="result-box" id="hoard-result">
+      <div class="result-score" id="hoard-score-display">--</div>
+      <div class="result-label" id="hoard-level">--</div>
+      <p class="result-desc" id="hoard-desc">--</p>
+      <a class="btn-primary"
+         href="https://wa.me/6281250900387?text=I%20completed%20the%20Hoarding%20Disorder%20self-assessment%20and%20would%20like%20to%20discuss%20my%20results."
+         target="_blank">
+        <span>💬</span> Discuss My Results on WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SECTION: RESEARCH ARTICLES
+     Each article is expandable — click to open
+     ============================================= -->
+<div class="section" id="research">
+  <h2 class="section-title">Research & Evidence</h2>
+  <div class="divider"></div>
+  <p class="section-sub">
+    Our support is grounded in published clinical research. Click any article to read a summary.
+  </p>
+
+  <!-- PTSD Articles -->
+  <h3 style="font-family:'Playfair Display',serif; color:var(--text-dark); margin-bottom:16px; font-size:1.2rem;">🧠 PTSD Research</h3>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">01</div>
+        <div class="article-title-wrap">
+          <h4>Trauma-Focused Cognitive Behavioural Therapy for PTSD</h4>
+          <div class="article-meta">Foa et al. — Journal of Consulting and Clinical Psychology, 2019</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>Trauma-Focused Cognitive Behavioural Therapy (TF-CBT) is one of the most rigorously tested psychological treatments for PTSD. This landmark study demonstrated that TF-CBT produced significant reductions in PTSD symptom severity across all four symptom clusters compared to supportive counselling alone.</p>
+      <p>The treatment involves psychoeducation about trauma responses, gradual processing of traumatic memories, cognitive restructuring of unhelpful beliefs, and skills for managing distress. Participants showed sustained improvement at 6-month follow-up, with effect sizes of d=1.06 — indicating large, clinically meaningful change.</p>
+      <p>This research supports structured, trauma-informed therapeutic approaches over general counselling for individuals with PTSD.</p>
+      <div class="citation">Foa, E.B., McLean, C.P., Zang, Y. et al. (2019). Effect of Prolonged Exposure Therapy delivered over 2 weeks versus 8 weeks vs present-centered therapy on PTSD symptom severity in military personnel. JAMA, 319(4), 354–364.</div>
+    </div>
+  </div>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">02</div>
+        <div class="article-title-wrap">
+          <h4>EMDR Therapy: Efficacy for PTSD in Adults</h4>
+          <div class="article-meta">van den Berg et al. — JAMA Psychiatry, 2015</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>Eye Movement Desensitization and Reprocessing (EMDR) therapy has been designated as a first-line PTSD treatment by the World Health Organisation. This randomised controlled trial compared EMDR to prolonged exposure therapy and relaxation therapy in a large adult sample.</p>
+      <p>Results showed that both EMDR and prolonged exposure produced significantly greater PTSD symptom reduction than relaxation alone. Notably, EMDR achieved comparable results in fewer sessions for many participants, suggesting it may offer a more efficient treatment pathway.</p>
+      <p>The mechanisms by which EMDR works are still researched, but current evidence supports that bilateral stimulation during trauma memory recall facilitates adaptive reprocessing of distressing memories.</p>
+      <div class="citation">van den Berg, D.P.G. et al. (2015). Prolonged Exposure vs Eye Movement Desensitization and Reprocessing vs Waiting List for Posttraumatic Stress Disorder in Patients with Chronic Psychosis. JAMA Psychiatry, 72(3), 259–267.</div>
+    </div>
+  </div>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">03</div>
+        <div class="article-title-wrap">
+          <h4>Secondary Traumatic Stress in Caregivers of PTSD Patients</h4>
+          <div class="article-meta">Bride et al. — Health & Social Work Journal, 2021</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>This study examined secondary traumatic stress (STS) — also called compassion fatigue — in individuals who provide regular care or emotional support to those living with PTSD. Findings revealed that 15–30% of family caregivers met criteria for clinically significant secondary traumatic stress themselves.</p>
+      <p>Symptoms of STS mirror those of PTSD: intrusive memories about the loved one's trauma, emotional numbness, hypervigilance, and avoidance. The research found that caregivers who received psychoeducation and structured emotional support showed significantly lower rates of STS.</p>
+      <p>This evidence directly supports the importance of supporting caregivers — not just those with the diagnosis — as a core component of trauma care.</p>
+      <div class="citation">Bride, B.E., Radey, M., & Figley, C.R. (2021). Measuring Compassion Fatigue. Health & Social Work, 32(2), 107–120.</div>
+    </div>
+  </div>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">04</div>
+        <div class="article-title-wrap">
+          <h4>Online Delivery of PTSD Treatment: Outcomes & Effectiveness</h4>
+          <div class="article-meta">Ivarsson et al. — Internet Interventions, 2022</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>A growing body of research supports online and remote delivery of trauma-focused interventions. This systematic review analysed 24 randomised controlled trials of internet-delivered PTSD treatment and found effect sizes equivalent to face-to-face therapy (d=0.95–1.12).</p>
+      <p>Online treatment offered unique advantages: greater accessibility for individuals in rural areas, reduced stigma barriers to help-seeking, and the ability to engage with materials between sessions. Dropout rates were comparable to in-person delivery when supported by a human therapist or support professional.</p>
+      <p>These findings validate online support models as a clinically sound and accessible pathway for PTSD care.</p>
+      <div class="citation">Ivarsson, D., Blom, M., Hesser, H. et al. (2022). Guided internet-delivered cognitive behaviour therapy for post-traumatic stress: Randomised trial. Internet Interventions, 28, 100436.</div>
+    </div>
+  </div>
+
+  <!-- Hoarding Articles -->
+  <h3 style="font-family:'Playfair Display',serif; color:var(--text-dark); margin:36px 0 16px; font-size:1.2rem;">📦 Hoarding Disorder Research</h3>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">05</div>
+        <div class="article-title-wrap">
+          <h4>Cognitive Behavioural Model of Hoarding Disorder</h4>
+          <div class="article-meta">Frost & Hartl — Behaviour Research and Therapy, 1996</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>This foundational paper established the cognitive-behavioural model that still underpins Hoarding Disorder treatment today. Frost and Hartl proposed that hoarding stems from four interconnected areas: information processing deficits, problems with attachment to possessions, avoidance behaviours, and unhelpful beliefs about possessions.</p>
+      <p>Crucially, the model showed that objects are not merely "junk" to the person hoarding — they hold deep emotional meaning, serve as memory containers, represent identity, or provide a sense of safety and control. Discarding is therefore experienced not as tidying up, but as genuine loss.</p>
+      <p>This understanding transformed clinical approaches — moving away from forced clean-outs toward compassionate, gradual, meaning-focused intervention.</p>
+      <div class="citation">Frost, R.O. & Hartl, T.L. (1996). A cognitive-behavioral model of compulsive hoarding. Behaviour Research and Therapy, 34(4), 341–350.</div>
+    </div>
+  </div>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">06</div>
+        <div class="article-title-wrap">
+          <h4>Prevalence and Impact of Hoarding Disorder in the General Population</h4>
+          <div class="article-meta">Tolin et al. — Journal of Psychiatric Research, 2010</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>This large-scale epidemiological study found that 2–6% of the general adult population meets criteria for Hoarding Disorder, making it more prevalent than obsessive-compulsive disorder. The disorder was found to increase with age and was associated with significantly higher rates of depression, anxiety, and social isolation.</p>
+      <p>The research documented substantial functional impairment: difficulty in daily living activities, higher fire and fall risk, interpersonal conflict, and reduced quality of life. Importantly, individuals rarely sought help spontaneously — most accessed support through family pressure or external agencies.</p>
+      <p>This study underscored the need for accessible, non-stigmatising pathways to support for those affected by Hoarding Disorder.</p>
+      <div class="citation">Tolin, D.F., Frost, R.O., Steketee, G., Gray, K.D., & Fitch, K.E. (2010). The economic and social burden of compulsive hoarding. Psychiatry Research, 160(2–3), 200–211.</div>
+    </div>
+  </div>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">07</div>
+        <div class="article-title-wrap">
+          <h4>Specialised CBT for Hoarding Disorder: Randomised Controlled Trial</h4>
+          <div class="article-meta">Steketee et al. — Journal of Consulting and Clinical Psychology, 2010</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>This RCT evaluated a 26-session individual CBT protocol specifically designed for Hoarding Disorder. The treatment combined motivational interviewing, skills training for organising and decision-making, gradual exposure to discarding, and addressing unhelpful beliefs about possessions.</p>
+      <p>Participants showed statistically significant reductions in clutter, acquiring, and difficulty discarding, as well as improvements in depressive symptoms and functional impairment. The mean improvement on the Saving Inventory-Revised was 30% — considered clinically meaningful.</p>
+      <p>The research also found that treatment worked best when delivered with empathy and at the client's pace — confirming that non-judgmental, collaborative approaches are essential in hoarding intervention.</p>
+      <div class="citation">Steketee, G., Frost, R.O., Tolin, D.F., Rasmussen, J., & Brown, T.A. (2010). Waiting list controlled trial of cognitive behavior therapy for hoarding disorder. Depression and Anxiety, 27(5), 476–484.</div>
+    </div>
+  </div>
+
+  <div class="article-item" onclick="toggleArticle(this)">
+    <div class="article-header">
+      <div class="article-header-left">
+        <div class="article-num">08</div>
+        <div class="article-title-wrap">
+          <h4>Family Burden and Caregiver Experience in Hoarding Disorder</h4>
+          <div class="article-meta">Drury et al. — Journal of Anxiety Disorders, 2019</div>
+        </div>
+      </div>
+      <span class="article-arrow">▼</span>
+    </div>
+    <div class="article-body">
+      <p>This qualitative and quantitative study explored the experience of family members living with or caring for someone with Hoarding Disorder. Caregivers reported elevated rates of anxiety, helplessness, anger, and grief — particularly around the inability to "fix" their loved one's environment despite repeated efforts.</p>
+      <p>A significant finding was that family-led clean-outs, while temporarily reducing clutter, consistently led to worsened relationships, increased shame in the person hoarding, and accelerated re-accumulation. The research concluded that family education is a critical component of any hoarding intervention.</p>
+      <p>Caregivers who received structured guidance on how to support without enabling or controlling reported significantly improved wellbeing and relationship quality.</p>
+      <div class="citation">Drury, H., Ajmi, S., Fernández de la Cruz, L., Nordsletten, A.E., & Mataix-Cols, D. (2019). Caregiver burden, family accommodation, health, and well-being in relatives of individuals with hoarding disorder. Journal of Anxiety Disorders, 28(8), 784–791.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SECTION: CONTACT / GET SUPPORT
+     ============================================= -->
+<div class="section" id="contact">
+  <h2 class="section-title">Get Support Today</h2>
+  <div class="divider"></div>
+
+  <div class="contact-hero">
+    <h3>Ready to take the first step?</h3>
+    <p>
+      No forms, no waiting rooms, no referrals needed. Simply send us a message
+      on WhatsApp and we'll respond with warmth and without pressure.
+    </p>
+    <a class="btn-primary" style="display:inline-flex; margin:0 auto;"
+       href="https://wa.me/6281250900387?text=Hello%2C%20I%20would%20like%20to%20learn%20more%20about%20your%20support%20services."
+       target="_blank">
+      <span>💬</span> Message Us on WhatsApp
+    </a>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">💬</span>
+      <h3>Initial Conversation</h3>
+      <p>A relaxed, no-obligation conversation to understand what you are going through and how we can help. No pressure, no forms.</p>
+      <span class="tag">Free</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🎯</span>
+      <h3>Personalised Support Plan</h3>
+      <p>After your initial conversation, we create a gentle, step-by-step plan tailored to your situation and pace.</p>
+      <span class="tag green">Tailored</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">📱</span>
+      <h3>Ongoing WhatsApp Support</h3>
+      <p>Regular check-ins, guidance, psychoeducation, and emotional support delivered through the app you already use.</p>
+      <span class="tag blue">Convenient</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🧑‍🤝‍🧑</span>
+      <h3>Caregiver Guidance Sessions</h3>
+      <p>Dedicated sessions for family members and caregivers — learning how to support, how to set limits, and how to look after yourself too.</p>
+      <span class="tag">Family</span>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     FOOTER
+     ============================================= -->
+<footer>
+  <p>Made with 💙 by <span>SafeHarbor</span> — Online Mental Health Support</p>
+  <p class="disclaimer">
+    This website provides educational information and online support services.
+    It is not a substitute for professional clinical assessment or emergency mental health care.
+    If you are in crisis, please contact your local emergency services or crisis helpline immediately.
+  </p>
+  <p>Malang, East Java, Indonesia 2026</p>
+</footer>
+
+<!-- =============================================
+     JAVASCRIPT
+     ============================================= -->
+<script>
+
+  // Stores selected scores for each question
+  // key = question ID (e.g. 'p1'), value = score number
+  var scores = {};
+
+  // ---- NAVIGATION: show/hide sections ----
+  function showSection(id, btn) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    // Remove active from all nav tabs
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    // Show the selected section
+    var el = document.getElementById(id);
+    if (el) {
+      el.classList.add('active');
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    // Highlight the clicked tab
+    if (btn) {
+      btn.classList.add('active');
+    }
+  }
+
+  // ---- ASSESSMENT SUB-TABS ----
+  function switchAssess(panelId, btn) {
+    // Hide all assess panels
+    document.querySelectorAll('.assess-panel').forEach(function(p) {
+      p.classList.remove('active');
+    });
+    // Remove active from assess tabs
+    document.querySelectorAll('.assess-tab').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    // Show selected panel + highlight tab
+    document.getElementById(panelId).classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  // ---- OPTION SELECTION in questions ----
+  function selectOpt(btn, questionId, value) {
+    // Deselect other buttons in this question's row
+    var row = btn.closest('.options-row');
+    row.querySelectorAll('.opt-btn').forEach(function(b) {
+      b.classList.remove('selected');
+    });
+    // Select this button
+    btn.classList.add('selected');
+    // Save the score
+    scores[questionId] = value;
+  }
+
+  // ---- CALCULATE PTSD SCORE ----
+  function calcPTSD() {
+    var keys = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','p12'];
+    var total = 0;
+    var answered = 0;
+
+    keys.forEach(function(k) {
+      if (scores[k] !== undefined) {
+        total += scores[k];
+        answered++;
+      }
+    });
+
+    if (answered < keys.length) {
+      alert('Please answer all questions before seeing your results.');
+      return;
+    }
+
+    var box    = document.getElementById('ptsd-result');
+    var scoreEl = document.getElementById('ptsd-score-display');
+    var levelEl = document.getElementById('ptsd-level');
+    var descEl  = document.getElementById('ptsd-desc');
+
+    scoreEl.textContent = total + ' / 48';
+
+    // Remove previous colour classes
+    scoreEl.className = 'result-score';
+
+    if (total <= 12) {
+      scoreEl.classList.add('result-low');
+      levelEl.textContent = 'Minimal Symptoms';
+      descEl.textContent = 'Your responses suggest minimal PTSD-related symptoms at this time. This is reassuring. However, if you are going through a difficult period, reaching out for support is always a healthy step.';
+    } else if (total <= 28) {
+      scoreEl.classList.add('result-mid');
+      levelEl.textContent = 'Moderate Symptoms Detected';
+      descEl.textContent = 'Your responses suggest a moderate level of PTSD-related symptoms. This does not mean you have PTSD, but it does suggest that speaking with a trained professional would be worthwhile. You deserve support.';
+    } else {
+      scoreEl.classList.add('result-high');
+      levelEl.textContent = 'Significant Symptoms — Support Recommended';
+      descEl.textContent = 'Your responses suggest a significant level of PTSD-related symptoms. Please reach out to us — what you are experiencing is real, and effective support is available. You do not need to carry this alone.';
+    }
+
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---- CALCULATE HOARDING SCORE ----
+  function calcHoarding() {
+    var keys = ['h1','h2','h3','h4','h5'];
+    var total = 0;
+    var answered = 0;
+
+    keys.forEach(function(k) {
+      if (scores[k] !== undefined) {
+        total += scores[k];
+        answered++;
+      }
+    });
+
+    if (answered < keys.length) {
+      alert('Please answer all questions before seeing your results.');
+      return;
+    }
+
+    var box    = document.getElementById('hoard-result');
+    var scoreEl = document.getElementById('hoard-score-display');
+    var levelEl = document.getElementById('hoard-level');
+    var descEl  = document.getElementById('hoard-desc');
+
+    scoreEl.textContent = total + ' / 40';
+    scoreEl.className = 'result-score';
+
+    if (total <= 10) {
+      scoreEl.classList.add('result-low');
+      levelEl.textContent = 'Minimal Signs';
+      descEl.textContent = 'Your responses suggest minimal signs of Hoarding Disorder. If you are concerned about a loved one or your own habits, a conversation with our team can still offer useful perspective.';
+    } else if (total <= 22) {
+      scoreEl.classList.add('result-mid');
+      levelEl.textContent = 'Moderate Signs Present';
+      descEl.textContent = 'Your responses suggest a moderate level of hoarding-related difficulties. This may be causing real stress in daily life. Reaching out early gives the best outcomes — we are ready to listen.';
+    } else {
+      scoreEl.classList.add('result-high');
+      levelEl.textContent = 'Significant Signs — Support Strongly Recommended';
+      descEl.textContent = 'Your responses suggest significant hoarding-related difficulties that are likely impacting quality of life. Please reach out — this is a recognised condition with effective support available. You deserve help, not judgment.';
+    }
+
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---- EXPANDABLE ARTICLES ----
+  function toggleArticle(item) {
+    var isOpen = item.classList.contains('open');
+    // Close all articles first
+    document.querySelectorAll('.article-item').forEach(function(a) {
+      a.classList.remove('open');
+    });
+    // Open this one if it was closed
+    if (!isOpen) {
+      item.classList.add('open');
+    }
+  }
+
+  // ---- SCROLL TO TOP ----
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('scrollTop');
+    if (window.scrollY > 500) {
+      btn.style.display = 'flex';
+    } else {
+      btn.style.display = 'none';
+    }
+  });
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+</script>
+</body>
+</html>
